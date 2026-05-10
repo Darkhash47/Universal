@@ -1,16 +1,19 @@
 import React, { useState } from 'react';
 import { NavLink, useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
+import { useRole } from '../hooks/useRole';
 import { auth } from '../lib/firebase';
 import { 
   User, Search, ShieldCheck, LogOut, Terminal, 
-  Newspaper, Target, Trophy, Users, Zap, Menu, X 
+  Newspaper, Target, Trophy, Users, Zap, Menu, X,
+  Activity, GraduationCap, Bell
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 
 export const Navigation = () => {
-  const { user, isAdmin, isCoordinator } = useAuth();
+  const { user } = useAuth();
+  const { isAdmin, isCoordinator } = useRole();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -88,7 +91,10 @@ export const Navigation = () => {
               <div className="text-[8px] font-mono text-white/20 uppercase tracking-[0.4em] mb-4 px-4">Core Systems</div>
               <NavItem to="/dashboard" icon={<User className="w-4 h-4" />} label="Terminal" />
               <NavItem to="/news" icon={<Newspaper className="w-4 h-4" />} label="Intel Feed" />
+              <NavItem to="/notifications" icon={<Bell className="w-4 h-4" />} label="Signals" badge={3} />
               <NavItem to="/missions" icon={<Target className="w-4 h-4" />} label="Missions" />
+              <NavItem to="/cyber-range" icon={<Activity className="w-4 h-4" />} label="Cyber Range" />
+              <NavItem to="/academy" icon={<GraduationCap className="w-4 h-4" />} label="Academy" />
               
               <div className="pt-6 pb-2 text-[8px] font-mono text-white/20 uppercase tracking-[0.4em] px-4">Network</div>
               <NavItem to="/discovery" icon={<Search className="w-4 h-4" />} label="Operatives" />

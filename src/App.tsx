@@ -11,7 +11,11 @@ import { News } from './views/News';
 import { Missions } from './views/Missions';
 import { Leaderboard } from './views/Leaderboard';
 import { Teams } from './views/Teams';
+import { Notifications } from './views/Notifications';
+import { CyberRange } from './views/CyberRange';
+import { Academy } from './views/Academy';
 import { Navigation } from './components/Navigation';
+import { ErrorBoundary } from './components/ErrorBoundary';
 import { Shield, Zap, Terminal } from 'lucide-react';
 import { cn } from './lib/utils';
 
@@ -69,6 +73,9 @@ function AppContent() {
             <Route path="/missions" element={<PrivateRoute><Missions /></PrivateRoute>} />
             <Route path="/discovery" element={<PrivateRoute><Discovery /></PrivateRoute>} />
             <Route path="/leaderboard" element={<PrivateRoute><Leaderboard /></PrivateRoute>} />
+            <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
+            <Route path="/cyber-range" element={<PrivateRoute><CyberRange /></PrivateRoute>} />
+            <Route path="/academy" element={<PrivateRoute><Academy /></PrivateRoute>} />
             <Route path="/teams" element={<PrivateRoute><Teams /></PrivateRoute>} />
             <Route path="/moderation" element={<PrivateRoute><Moderation /></PrivateRoute>} />
             <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
@@ -81,10 +88,12 @@ function AppContent() {
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <AuthProvider>
-        <AppContent />
-      </AuthProvider>
-    </BrowserRouter>
+    <ErrorBoundary>
+      <BrowserRouter>
+        <AuthProvider>
+          <AppContent />
+        </AuthProvider>
+      </BrowserRouter>
+    </ErrorBoundary>
   );
 }
