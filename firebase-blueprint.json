@@ -1,0 +1,138 @@
+{
+  "entities": {
+    "User": {
+      "title": "User Profile",
+      "description": "Academy operative identity node with progression data.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string" },
+        "displayName": { "type": "string" },
+        "email": { "type": "string" },
+        "photoURL": { "type": "string" },
+        "title": { "type": "string", "description": "Rank or title within the academy." },
+        "role": { 
+          "type": "string", 
+          "enum": ["CADET", "CURATOR", "COORDINATOR", "ADMIN"],
+          "default": "CADET"
+        },
+        "teamId": { "type": "string" },
+        "points": { "type": "number", "default": 0 },
+        "level": { "type": "number", "default": 1 },
+        "bio": { "type": "string" },
+        "hardSkills": { 
+          "type": "object",
+          "description": "Mapped technical skills with XP and levels."
+        },
+        "softSkills": { 
+          "type": "object",
+          "description": "Mapped social skills with XP and levels."
+        },
+        "achievements": { 
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "experience": { 
+          "type": "array", 
+          "items": { 
+            "type": "object",
+            "properties": {
+              "company": { "type": "string" },
+              "role": { "type": "string" },
+              "date": { "type": "string" },
+              "description": { "type": "string" }
+            }
+          }
+        },
+        "isVerified": { "type": "boolean", "default": false }
+      },
+      "required": ["uid", "displayName", "email", "role"]
+    },
+    "News": {
+      "title": "News Feed",
+      "description": "Cybersecurity updates and project announcements.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "content": { "type": "string" },
+        "type": { "type": "string", "enum": ["CYBER_NEWS", "PROJECT_UPDATE", "ANNOUNCEMENT", "CTF_EVENT"] },
+        "authorId": { "type": "string" },
+        "imageUrl": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "content", "type", "createdAt"]
+    },
+    "Task": {
+      "title": "Academy Task",
+      "description": "Weekly challenges and missions for cadets.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "rewardXP": { "type": "number" },
+        "difficulty": { "type": "string", "enum": ["EASY", "MEDIUM", "HARD", "INSANE"] },
+        "category": { "type": "string" },
+        "deadline": { "type": "string", "format": "date-time" }
+      },
+      "required": ["title", "description", "rewardXP", "difficulty", "category"]
+    },
+    "Submission": {
+      "title": "Task Submission",
+      "description": "User write-up and proof for completed tasks.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "taskId": { "type": "string" },
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "content": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED"] },
+        "reviewedBy": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["taskId", "userId", "content", "status", "createdAt"]
+    },
+    "Team": {
+      "title": "Squad",
+      "description": "Collaborative units of operatives.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "description": { "type": "string" },
+        "leaderId": { "type": "string" },
+        "memberCount": { "type": "number" },
+        "totalPoints": { "type": "number" },
+        "logoUrl": { "type": "string" }
+      },
+      "required": ["name", "leaderId"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "User",
+      "description": "User identity node data."
+    },
+    "/news/{newsId}": {
+      "schema": "News",
+      "description": "Global news feed."
+    },
+    "/tasks/{taskId}": {
+      "schema": "Task",
+      "description": "Available missions."
+    },
+    "/submissions/{submissionId}": {
+      "schema": "Submission",
+      "description": "Submitted reports."
+    },
+    "/teams/{teamId}": {
+      "schema": "Team",
+      "description": "Squad data."
+    },
+    "/verifications/{requestId}": {
+      "schema": "VerificationRequest",
+      "description": "Legacy verification protocols."
+    }
+  }
+}
