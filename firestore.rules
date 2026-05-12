@@ -1,123 +1,175 @@
 rules_version = '2';
 service cloud.firestore {
   match /databases/{database}/documents {
-    // Default-deny catch-all
+    // 0. Default Deny Catch-all
     match /{document=**} {
       allow read, write: if false;
     }
 
-    // Helper Primitives
-    function isSignedIn() {
-      return request.auth != null;
-    }
+    // --- GLOBAL HELPERS ---
+    function isSignedIn() { return request.auth != null; }
+    function isVerified() { return isSignedIn() && request.auth.token.email_verified == true; }
+    function isValidId(id) { return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$'); }
+    function incoming() { return request.resource.data; }
+    function existing() { return resource.data; }
     
-    function isEmailVerified() {
-      return request.auth.token.email_verified == true;
+    // Auth-based identity checks
+    function isOwner(userId) { return isSignedIn() && request.auth.uid == userId; }
+    function isMasterAdmin() {
+      return isSignedIn() && (request.auth.token.email == 'hashmatrix.sec@gmail.com' || request.auth.uid == 'MASTER_UID_PLACEHOLDER');
     }
-
-    function isOwner(userId) {
-      return isSignedIn() && request.auth.uid == userId;
-    }
-
-    function isAdmin() {
-      return isSignedIn() && (
-        get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'ADMIN' ||
-        (request.auth.token.email == "hashmatrix.sec@gmail.com" && request.auth.token.email_verified == true)
+    function isAdmin() { 
+      return isMasterAdmin() || (
+             isSignedIn() && 
+             exists(/databases/$(database)/documents/users/$(request.auth.uid)) &&
+             get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'admin'
       );
     }
 
-    function isRole(role) {
-      return isSignedIn() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == role;
+    // --- VALIDATION BLUEPRINTS ---
+
+    function isValidUser(data) {
+      return data.uid is string &&
+             data.username is string && data.username.size() <= 64 &&
+             data.displayName is string && data.displayName.size() <= 128 &&
+             data.email is string && data.email.size() <= 128 &&
+             data.role in ['student', 'admin'] &&
+             data.disabled is bool &&
+             (data.level == null || data.level is number) &&
+             (data.points == null || data.points is number) &&
+             data.createdAt is timestamp &&
+             data.updatedAt is timestamp &&
+             data.keys().hasAll(['uid', 'username', 'role', 'createdAt', 'updatedAt']) &&
+             data.keys().size() <= 12;
     }
 
-    function incoming() {
-      return request.resource.data;
+    function isValidAuthLog(data) {
+      return data.userId is string &&
+             data.event in ['LOGIN_SUCCESS', 'LOGIN_FAILURE', 'LOGOUT'] &&
+             data.timestamp is timestamp &&
+             data.keys().hasAll(['userId', 'event', 'timestamp']) &&
+             data.keys().size() <= 6;
     }
 
-    function existing() {
-      return resource.data;
+    function isValidNews(data) {
+      return data.title is string && data.title.size() <= 200 &&
+             data.content is string && data.content.size() <= 5000 &&
+             data.type in ['CYBER_NEWS', 'PROJECT_UPDATE', 'ANNOUNCEMENT', 'CTF_EVENT'] &&
+             data.createdAt is timestamp &&
+             data.keys().hasAll(['title', 'content', 'type', 'createdAt']) &&
+             data.keys().size() <= 8;
     }
 
-    function isValidId(id) {
-      return id is string && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    function isValidTask(data) {
+      return data.title is string && data.title.size() <= 200 &&
+             data.description is string && data.description.size() <= 5000 &&
+             data.rewardXP is number &&
+             data.difficulty in ['EASY', 'MEDIUM', 'HARD', 'INSANE'] &&
+             data.category is string &&
+             data.keys().hasAll(['title', 'description', 'rewardXP', 'difficulty', 'category']) &&
+             data.keys().size() <= 10;
     }
 
-    // --- Users Collection ---
+    function isValidSubmission(data) {
+      return data.taskId is string &&
+             data.userId is string &&
+             data.content is string && data.content.size() <= 10000 &&
+             data.status in ['PENDING', 'APPROVED', 'REJECTED'] &&
+             data.createdAt is timestamp &&
+             data.keys().hasAll(['taskId', 'userId', 'content', 'status', 'createdAt']) &&
+             data.keys().size() <= 12;
+    }
+
+    function isValidNotification(data) {
+      return data.userId is string &&
+             data.title is string && data.title.size() <= 200 &&
+             data.body is string && data.body.size() <= 1000 &&
+             data.type in ['SECURITY', 'INTEL', 'SOCIAL', 'SYSTEM'] &&
+             data.createdAt is timestamp &&
+             data.keys().hasAll(['userId', 'title', 'body', 'type', 'createdAt']) &&
+             data.keys().size() <= 8;
+    }
+
+    function isValidTeam(data) {
+      return data.name is string && data.name.size() <= 64 &&
+             data.description is string && data.description.size() <= 1000 &&
+             (data.logoUrl == null || (data.logoUrl is string && data.logoUrl.size() <= 512)) &&
+             data.memberCount is number &&
+             data.totalPoints is number &&
+             data.createdAt is timestamp &&
+             data.keys().hasAll(['name', 'description', 'memberCount', 'totalPoints', 'createdAt']) &&
+             data.keys().size() <= 10;
+    }
+
+    // --- COLLECTION RULES ---
+
+    // Users: Profiles and identity data
     match /users/{userId} {
-      function isValidUser(data) {
-        return data.keys().hasAll(['uid', 'displayName', 'email', 'role']) &&
-               data.uid is string && data.uid.size() <= 128 &&
-               data.displayName is string && data.displayName.size() <= 128 &&
-               data.email is string && data.email.size() <= 256 &&
-               data.role in ['CADET', 'CURATOR', 'COORDINATOR', 'ADMIN'];
-      }
-
-      allow get: if true;
-      allow list: if true;
-
-      allow create: if isOwner(userId) && isValidUser(incoming()) && incoming().uid == userId && incoming().role == 'CADET';
+      allow get: if isSignedIn();
+      allow list: if isSignedIn() && (isAdmin() || resource.data.uid == request.auth.uid);
       
-      allow update: if (isOwner(userId) && (
-        incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'photoURL', 'title', 'bio', 'hardSkills', 'softSkills', 'experience', 'teamId'])
-      )) || isAdmin();
+      allow create: if (isAdmin() || isMasterAdmin() || (isOwner(userId) && incoming().role == 'student')) 
+                    && isValidId(userId) 
+                    && isValidUser(incoming());
+      
+      allow update: if (isAdmin() || isMasterAdmin() || (isOwner(userId) && incoming().role == existing().role && incoming().diff(existing()).affectedKeys().hasOnly(['displayName', 'updatedAt', 'points', 'level']))) 
+                    && isValidId(userId) 
+                    && isValidUser(incoming());
+                    
+      allow delete: if isAdmin() || isMasterAdmin();
     }
 
-    // --- News Collection ---
+    // News: Global broadcast feed
     match /news/{newsId} {
-      allow read: if true;
-      allow write: if isAdmin() || isRole('COORDINATOR');
+      allow read: if isSignedIn();
+      allow write: if isAdmin() && isValidId(newsId) && (request.method == 'delete' || isValidNews(incoming()));
     }
 
-    // --- Tasks Collection ---
+    // Tasks: Operational missions
     match /tasks/{taskId} {
       allow read: if isSignedIn();
-      allow write: if isAdmin() || isRole('COORDINATOR') || isRole('CURATOR');
+      allow write: if isAdmin() && isValidId(taskId) && (request.method == 'delete' || isValidTask(incoming()));
     }
 
-    // --- Submissions Collection ---
+    // Submissions: User mission reports
     match /submissions/{submissionId} {
-      allow read: if isSignedIn() && (isOwner(existing().userId) || isAdmin() || isRole('CURATOR'));
-      allow list: if isSignedIn() && (isAdmin() || isRole('CURATOR') || resource.data.userId == request.auth.uid);
-      allow create: if isSignedIn() && incoming().userId == request.auth.uid && incoming().status == 'PENDING';
-      allow update: if isAdmin() || isRole('CURATOR');
-    }
-
-    // --- Teams Collection ---
-    match /teams/{teamId} {
-      allow read: if isSignedIn();
-      allow write: if isAdmin() || isRole('COORDINATOR');
-    }
-
-    // --- Verifications Collection ---
-    match /verifications/{requestId} {
-      function isValidVerification(data) {
-        return data.keys().hasAll(['userId', 'certificateName', 'status', 'createdAt']) &&
-               data.userId is string && data.userId.size() <= 128 &&
-               data.certificateName is string && data.certificateName.size() <= 256 &&
-               data.status in ['PENDING', 'VERIFIED', 'REJECTED'] &&
-               data.createdAt is timestamp;
-      }
-
-      allow get: if isSignedIn() && (isOwner(existing().userId) || isAdmin());
-      allow list: if isSignedIn() && (request.query.limit <= 100) && (
-        isAdmin() || resource.data.userId == request.auth.uid
-      );
-
-      allow create: if isSignedIn() && isEmailVerified() && isValidVerification(incoming()) && incoming().userId == request.auth.uid && incoming().status == 'PENDING' && incoming().createdAt == request.time;
+      allow get: if isSignedIn() && (isAdmin() || isOwner(existing().userId));
+      allow list: if isSignedIn() && (isAdmin() || resource.data.userId == request.auth.uid);
       
-      allow update: if isAdmin() && (
-        incoming().diff(existing()).affectedKeys().hasAll(['status', 'processedAt']) &&
-        incoming().status in ['VERIFIED', 'REJECTED'] &&
-        incoming().processedAt == request.time
-      );
-
+      allow create: if isSignedIn() 
+                    && isValidId(submissionId) 
+                    && incoming().userId == request.auth.uid 
+                    && incoming().status == 'PENDING'
+                    && isValidSubmission(incoming());
+                    
+      allow update: if isAdmin() && isValidId(submissionId) && isValidSubmission(incoming());
       allow delete: if isAdmin();
     }
 
-    // --- Admins Collection ---
-    match /admins/{userId} {
+    // Auth Logs: Security audit trails
+    match /auth_logs/{logId} {
+      allow read: if isAdmin();
+      allow create: if isSignedIn() && isValidId(logId) && isValidAuthLog(incoming());
+    }
+
+    // Notifications: User alerts
+    match /notifications/{notifId} {
+      allow get: if isSignedIn() && isOwner(existing().userId);
+      allow list: if isSignedIn() && resource.data.userId == request.auth.uid;
+      allow write: if isAdmin() && isValidId(notifId) && (request.method == 'delete' || isValidNotification(incoming()));
+    }
+
+    // Teams: Collaborative units
+    match /teams/{teamId} {
       allow read: if isSignedIn();
-      allow write: if false; // Only manageable via console or specialized system
+      allow create: if isSignedIn() && isValidId(teamId) && isValidTeam(incoming());
+      allow update: if isSignedIn() && isValidId(teamId) && (isAdmin() || isOwner(existing().ownerId)) && isValidTeam(incoming()); 
+      allow delete: if isAdmin();
+    }
+
+    // System: Internal telemetry
+    match /system/{docId} {
+      allow read: if isSignedIn();
     }
   }
 }

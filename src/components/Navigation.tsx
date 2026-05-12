@@ -6,14 +6,14 @@ import { auth } from '../lib/firebase';
 import { 
   User, Search, ShieldCheck, LogOut, Terminal, 
   Newspaper, Target, Trophy, Users, Zap, Menu, X,
-  Activity, GraduationCap, Bell
+  Activity, GraduationCap, Bell, Cpu, Shield, MessageSquare
 } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 
 export const Navigation = () => {
   const { user } = useAuth();
-  const { isAdmin, isCoordinator } = useRole();
+  const { isAdmin } = useRole();
   const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
@@ -51,7 +51,7 @@ export const Navigation = () => {
       <div className="lg:hidden fixed top-0 left-0 w-full z-50 bg-[#0a0a0a]/80 backdrop-blur-md border-b border-white/5 p-4 flex items-center justify-between">
         <Link to="/" className="flex items-center gap-3 group">
           <div className="w-8 h-8 rounded-lg bg-cyan-500 flex items-center justify-center shadow-[0_0_15px_rgba(6,182,212,0.5)] group-hover:scale-110 transition-transform">
-            <Zap className="w-5 h-5 text-black" />
+            <Shield className="w-5 h-5 text-black" />
           </div>
           <span className="text-lg font-black text-white italic tracking-tighter uppercase group-hover:text-cyan-400 transition-colors">Universal</span>
         </Link>
@@ -79,7 +79,7 @@ export const Navigation = () => {
             {/* Logo area */}
             <div className="hidden lg:flex items-center gap-4 mb-12 px-2">
               <div className="w-10 h-10 bg-cyan-500/10 border border-cyan-500/50 rounded-xl flex items-center justify-center glow-blue">
-                <Terminal className="w-5 h-5 text-cyan-400" />
+                <Shield className="w-5 h-5 text-cyan-400" />
               </div>
               <div>
                 <h1 className="text-lg font-black tracking-tighter italic leading-none text-white">UNIVERSAL</h1>
@@ -89,22 +89,25 @@ export const Navigation = () => {
 
             <div className="flex-1 space-y-2 overflow-y-auto no-scrollbar">
               <div className="text-[8px] font-mono text-white/20 uppercase tracking-[0.4em] mb-4 px-4">Core Systems</div>
-              <NavItem to="/dashboard" icon={<User className="w-4 h-4" />} label="Terminal" />
+              <NavItem to="/dashboard" icon={<Terminal className="w-4 h-4" />} label="Terminal" />
               <NavItem to="/news" icon={<Newspaper className="w-4 h-4" />} label="Intel Feed" />
               <NavItem to="/notifications" icon={<Bell className="w-4 h-4" />} label="Signals" badge={3} />
               <NavItem to="/missions" icon={<Target className="w-4 h-4" />} label="Missions" />
               <NavItem to="/cyber-range" icon={<Activity className="w-4 h-4" />} label="Cyber Range" />
               <NavItem to="/academy" icon={<GraduationCap className="w-4 h-4" />} label="Academy" />
+              <NavItem to="/hard-skills" icon={<Cpu className="w-4 h-4" />} label="Hard Skills" />
+              <NavItem to="/contact" icon={<MessageSquare className="w-4 h-4" />} label="Uplink" />
               
               <div className="pt-6 pb-2 text-[8px] font-mono text-white/20 uppercase tracking-[0.4em] px-4">Network</div>
               <NavItem to="/discovery" icon={<Search className="w-4 h-4" />} label="Operatives" />
               <NavItem to="/leaderboard" icon={<Trophy className="w-4 h-4" />} label="Rankings" />
               <NavItem to="/teams" icon={<Users className="w-4 h-4" />} label="Squads" />
 
-              {(isAdmin || isCoordinator) && (
+              {(isAdmin) && (
                 <>
                   <div className="pt-6 pb-2 text-[8px] font-mono text-amber-500/30 uppercase tracking-[0.4em] px-4">Command</div>
                   <NavItem to="/moderation" icon={<ShieldCheck className="w-4 h-4 text-amber-500/70" />} label="HQ Moderation" />
+                  <NavItem to="/admin/users" icon={<Users className="w-4 h-4 text-amber-500/70" />} label="Node Control" />
                 </>
               )}
             </div>

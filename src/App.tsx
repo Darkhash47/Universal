@@ -6,14 +6,17 @@ import { Dashboard } from './views/Dashboard';
 import { Discovery } from './views/Discovery';
 import { Moderation } from './views/Moderation';
 import { Profile } from './views/Profile';
+import { UserManagement } from './views/UserManagement';
 import { Landing } from './views/Landing';
 import { News } from './views/News';
 import { Missions } from './views/Missions';
 import { Leaderboard } from './views/Leaderboard';
 import { Teams } from './views/Teams';
+import { HardSkills } from './views/HardSkills';
 import { Notifications } from './views/Notifications';
 import { CyberRange } from './views/CyberRange';
 import { Academy } from './views/Academy';
+import { Contact } from './views/Contact';
 import { Navigation } from './components/Navigation';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { Shield, Zap, Terminal } from 'lucide-react';
@@ -44,12 +47,15 @@ function AppContent() {
         "relative transition-all duration-500",
         user ? "lg:pl-72" : ""
       )}>
-        <div className="max-w-7xl mx-auto px-6 py-12">
+        <div className={cn(
+          "max-w-7xl mx-auto px-6 pb-12",
+          user ? "pt-28 lg:pt-12" : "py-12"
+        )}>
           {user && (
             <header className="flex items-center justify-between mb-16 px-4">
               <div className="flex flex-col">
                 <h1 className="text-xl font-black tracking-tighter uppercase italic leading-none">Command Center</h1>
-                <span className="text-[8px] font-mono tracking-[0.4em] text-white/30 uppercase">Operational Status: Nominal</span>
+                <span className="text-[8px] font-mono tracking-[0.4em] text-white/40 uppercase mt-1">Operational Status: Nominal</span>
               </div>
 
               <div className="hidden md:flex items-center gap-8 text-white/20 font-mono text-[10px] uppercase tracking-widest">
@@ -76,9 +82,12 @@ function AppContent() {
             <Route path="/notifications" element={<PrivateRoute><Notifications /></PrivateRoute>} />
             <Route path="/cyber-range" element={<PrivateRoute><CyberRange /></PrivateRoute>} />
             <Route path="/academy" element={<PrivateRoute><Academy /></PrivateRoute>} />
+            <Route path="/hard-skills" element={<PrivateRoute><HardSkills /></PrivateRoute>} />
             <Route path="/teams" element={<PrivateRoute><Teams /></PrivateRoute>} />
             <Route path="/moderation" element={<PrivateRoute><Moderation /></PrivateRoute>} />
+            <Route path="/admin/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />
             <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
+            <Route path="/contact" element={<Contact />} />
           </Routes>
         </div>
       </div>

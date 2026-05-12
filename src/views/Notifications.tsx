@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { db } from '../lib/firebase';
+import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
 import { useAuth } from '../context/AuthContext';
 import { ClippedContainer, TechHeader } from '../components/UI';
 import { Bell, Info, ShieldAlert, Zap, Clock } from 'lucide-react';
@@ -27,7 +28,8 @@ export const Notifications = () => {
       setNotifications(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       setLoading(false);
     }, (error) => {
-      // If table doesn't exist yet, we'll show mock data for the demo
+      // If table doesn't exist yet or permission denied, we'll show mock data for the demo
+      handleFirestoreError(error, OperationType.LIST, 'notifications');
       setLoading(false);
     });
 

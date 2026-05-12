@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, where } from 'firebase/firestore';
+import { db } from '../lib/firebase';
+import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
 import { useAuth } from '../context/AuthContext';
 import { ClippedContainer, TechHeader, CyberButton } from '../components/UI';
 import { Target, Zap, Clock, ShieldCheck, ChevronRight, PenTool, Send, CheckCircle2, AlertCircle } from 'lucide-react';
@@ -17,19 +18,29 @@ export const Missions = () => {
   const { user, profile } = useAuth();
 
   useEffect(() => {
+    if (!user) return;
+
     const qTasks = query(collection(db, 'tasks'), orderBy('deadline', 'desc'));
     const unsubTasks = onSnapshot(qTasks, (snapshot) => {
       setTasks(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
     }, (error) => handleFirestoreError(error, OperationType.LIST, 'tasks'));
 
-    const qSubs = query(collection(db, 'submissions'), orderBy('createdAt', 'desc'));
+    // Secure query for submissions: filtered for residents, global for admins
+    const isAdmin = profile?.role === 'admin' || profile?.role === 'CURATOR' || profile?.role === 'ADMIN';
+    const qSubs = isAdmin 
+      ? query(collection(db, 'submissions'), orderBy('createdAt', 'desc'))
+      : query(collection(db, 'submissions'), where('userId', '==', user.uid), orderBy('createdAt', 'desc'));
+
     const unsubSubs = onSnapshot(qSubs, (snapshot) => {
       setSubmissions(snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() })));
       setLoading(false);
-    }, (error) => handleFirestoreError(error, OperationType.LIST, 'submissions'));
+    }, (error) => {
+      handleFirestoreError(error, OperationType.LIST, 'submissions');
+      setLoading(false);
+    });
 
     return () => { unsubTasks(); unsubSubs(); };
-  }, []);
+  }, [user, profile?.role]);
 
   const handleSubmit = async () => {
     if (!selectedTask || !writeup || !user) return;

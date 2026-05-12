@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { db } from '../lib/firebase';
+import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
 import { ClippedContainer, TechHeader, CyberButton } from '../components/UI';
 import { Users, Shield, Zap, TrendingUp, ChevronRight, UserPlus, XCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -17,6 +18,7 @@ export const Teams = () => {
       setLoading(false);
     }, (error) => {
       handleFirestoreError(error, OperationType.LIST, 'teams');
+      setLoading(false);
     });
     return () => unsubscribe();
   }, []);

@@ -6,46 +6,32 @@
       "type": "object",
       "properties": {
         "uid": { "type": "string" },
+        "username": { "type": "string", "description": "Unique identifiers for login." },
         "displayName": { "type": "string" },
         "email": { "type": "string" },
-        "photoURL": { "type": "string" },
-        "title": { "type": "string", "description": "Rank or title within the academy." },
         "role": { 
           "type": "string", 
-          "enum": ["CADET", "CURATOR", "COORDINATOR", "ADMIN"],
-          "default": "CADET"
+          "enum": ["student", "admin"],
+          "default": "student"
         },
-        "teamId": { "type": "string" },
-        "points": { "type": "number", "default": 0 },
-        "level": { "type": "number", "default": 1 },
-        "bio": { "type": "string" },
-        "hardSkills": { 
-          "type": "object",
-          "description": "Mapped technical skills with XP and levels."
-        },
-        "softSkills": { 
-          "type": "object",
-          "description": "Mapped social skills with XP and levels."
-        },
-        "achievements": { 
-          "type": "array",
-          "items": { "type": "string" }
-        },
-        "experience": { 
-          "type": "array", 
-          "items": { 
-            "type": "object",
-            "properties": {
-              "company": { "type": "string" },
-              "role": { "type": "string" },
-              "date": { "type": "string" },
-              "description": { "type": "string" }
-            }
-          }
-        },
-        "isVerified": { "type": "boolean", "default": false }
+        "disabled": { "type": "boolean", "default": false },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "updatedAt": { "type": "string", "format": "date-time" }
       },
-      "required": ["uid", "displayName", "email", "role"]
+      "required": ["uid", "username", "role", "createdAt"]
+    },
+    "AuthLog": {
+      "title": "Authentication Log",
+      "description": "Record of security access events.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "username": { "type": "string" },
+        "event": { "type": "string", "enum": ["LOGIN_SUCCESS", "LOGIN_FAILURE", "LOGOUT"] },
+        "ip": { "type": "string" },
+        "timestamp": { "type": "string", "format": "date-time" }
+      },
+      "required": ["username", "event", "timestamp"]
     },
     "News": {
       "title": "News Feed",
@@ -107,6 +93,31 @@
         "logoUrl": { "type": "string" }
       },
       "required": ["name", "leaderId"]
+    },
+    "VerificationRequest": {
+      "title": "Verification Request",
+      "description": "Legacy identity verification protocol request.",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string" },
+        "userName": { "type": "string" },
+        "status": { "type": "string", "enum": ["PENDING", "APPROVED", "REJECTED"] },
+        "createdAt": { "type": "string", "format": "date-time" }
+      },
+      "required": ["userId", "status", "createdAt"]
+    },
+    "SkillCatalogNode": {
+      "title": "Skill Catalog Node",
+      "description": "A node in the Hard Skills knowledge graph.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string" },
+        "description": { "type": "string" },
+        "category": { "type": "string" },
+        "difficulty": { "type": "string", "enum": ["Basic", "Intermediate", "Professional", "Expert"] },
+        "resourceLink": { "type": "string" }
+      },
+      "required": ["title", "description", "category", "difficulty", "resourceLink"]
     }
   },
   "firestore": {
@@ -133,6 +144,14 @@
     "/verifications/{requestId}": {
       "schema": "VerificationRequest",
       "description": "Legacy verification protocols."
+    },
+    "/auth_logs/{logId}": {
+      "schema": "AuthLog",
+      "description": "Security audit logs for authentication events."
+    },
+    "/skills_catalog/{nodeId}": {
+      "schema": "SkillCatalogNode",
+      "description": "Nodes for the Hard Skills interactive roadmap."
     }
   }
 }

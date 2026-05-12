@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, getDocs, limit } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { db } from '../lib/firebase';
+import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
 import { ClippedContainer, TechHeader } from '../components/UI';
 import { Search, Eye, Terminal } from 'lucide-react';
 import { Link } from 'react-router-dom';

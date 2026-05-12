@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { collection, query, orderBy, onSnapshot } from 'firebase/firestore';
-import { db, handleFirestoreError, OperationType } from '../lib/firebase';
+import { db } from '../lib/firebase';
+import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
 import { ClippedContainer, TechHeader } from '../components/UI';
 import { Newspaper, Calendar, User, ArrowRight } from 'lucide-react';
 import { motion } from 'motion/react';

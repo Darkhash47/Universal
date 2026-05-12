@@ -40,11 +40,30 @@
 }
 
 @utility glow-blue {
-  filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.5));
+  filter: drop-shadow(0 0 15px rgba(14, 165, 233, 0.4));
+}
+
+@utility glow-blue-sm {
+  filter: drop-shadow(0 0 5px rgba(14, 165, 233, 0.3));
 }
 
 @utility glow-red {
   filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.5));
+}
+
+@keyframes cyber-flicker {
+  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
+    opacity: 1;
+    text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
+  }
+  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
+    opacity: 0.4;
+    text-shadow: none;
+  }
+}
+
+.animate-cyber-flicker {
+  animation: cyber-flicker 4s infinite linear;
 }
 
 body {

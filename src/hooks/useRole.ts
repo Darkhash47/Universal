@@ -3,13 +3,12 @@ import { useAuth } from '../context/AuthContext';
 export const useRole = () => {
   const { profile } = useAuth();
 
-  const role = profile?.role || 'CADET';
+  const role = profile?.role || 'student';
 
   return {
     role,
-    isAdmin: role === 'ADMIN',
-    isCoordinator: role === 'COORDINATOR' || role === 'ADMIN',
-    isCurator: role === 'CURATOR' || role === 'COORDINATOR' || role === 'ADMIN',
-    isCadet: true,
+    isAdmin: role === 'admin',
+    isStudent: role === 'student',
+    isCadet: role === 'student', // Mapping for legacy compat if needed
   };
 };

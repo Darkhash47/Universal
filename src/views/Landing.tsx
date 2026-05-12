@@ -5,9 +5,8 @@ import {
   Target, Activity, Globe, Code, Box, Database, 
   MessageSquare, Github as GithubIcon, Disc as DiscordIcon, 
   BookOpen, Rocket, Award, Network, ChevronRight,
-  Search, Eye, Lock, FileCode, Bug, Bot
+  Search, Eye, Lock, FileCode, Bug, Bot, Send
 } from 'lucide-react';
-import { CyberParticles } from '../components/CyberParticles';
 import { CyberButton, ClippedContainer, TechHeader } from '../components/UI';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
@@ -22,27 +21,54 @@ export const Landing = () => {
   return (
     <div className="relative">
       {/* 1. Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-20 overflow-hidden">
-        <motion.div style={{ opacity, scale }} className="text-center space-y-8 z-10">
-          <CyberParticles text="UNIVERSAL" className="h-64 scale-150" />
-          <div className="space-y-4">
-            <h2 className="text-xl md:text-3xl font-black text-white uppercase italic tracking-tighter glow-blue">
-              Educational & Practical Cybersecurity Platform
+      <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-24 overflow-hidden">
+        {/* Background Ambient Effects */}
+        <div className="absolute inset-0 z-0">
+          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 blur-[120px] rounded-full animate-pulse" />
+          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-600/5 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
+          <div className="absolute inset-0 bg-grid-white opacity-[0.03] scale-150" />
+        </div>
+
+        <motion.div style={{ opacity, scale }} className="text-center space-y-10 md:space-y-12 z-10 relative">
+          <div className="relative group px-4">
+             {/* Large UNIVERSAL Text */}
+             <motion.h1 
+               initial={{ opacity: 0, scale: 0.95 }}
+               animate={{ opacity: 1, scale: 1 }}
+               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
+               className="text-5xl sm:text-7xl md:text-9xl lg:text-[11rem] font-black italic tracking-tighter leading-[0.8] select-none relative group"
+             >
+                <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-b from-white via-neutral-200 to-white/30 drop-shadow-[0_0_20px_rgba(6,182,212,0.6)] animate-cyber-flicker">
+                  UNIVERSAL
+                </span>
+                
+                {/* Accent glow on hover */}
+                <div className="absolute inset-0 bg-cyan-500/10 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
+             </motion.h1>
+             
+             {/* Accent line below */}
+             <motion.div 
+               initial={{ width: 0 }}
+               animate={{ width: "100%" }}
+               transition={{ delay: 0.5, duration: 1 }}
+               className="h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent max-w-lg mx-auto mt-4"
+             />
+          </div>
+
+          <div className="space-y-6 max-w-3xl mx-auto px-6">
+            <h2 className="text-2xl md:text-4xl font-bold text-white uppercase italic tracking-tighter glow-blue-sm">
+              Universal Cybersecurity Academy
             </h2>
-            <p className="max-w-2xl mx-auto text-white/50 text-sm md:text-lg leading-relaxed font-mono tracking-wide px-6">
-              Advanced training node for the next generation of cybersecurity operatives. 
-              Master the art of defense and offense through high-fidelity simulations.
+            <p className="text-white/40 text-sm md:text-xl leading-relaxed font-mono tracking-tight">
+              Next-gen cybersecurity platform for digital operatives. 
+              Master offensive and defensive skills through immersive tactical training.
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-6 pt-8">
-            <CyberButton onClick={() => user ? navigate('/dashboard') : navigate('/auth')} className="px-10 py-4 text-xl">
-              <Rocket className="w-5 h-5" />
-              Join Project
-            </CyberButton>
-            <CyberButton variant="ghost" className="px-10 py-4 text-xl border-white/20">
-              <Target className="w-5 h-5" />
-              Explore Directions
+          <div className="flex items-center justify-center gap-6 pt-6">
+            <CyberButton onClick={() => user ? navigate('/dashboard') : navigate('/auth')} className="px-10 md:px-16 py-4 md:py-5 text-xl md:text-2xl font-black italic">
+              <Rocket className="w-6 h-6" />
+              JOIN PROJECT
             </CyberButton>
           </div>
         </motion.div>
@@ -179,12 +205,13 @@ export const Landing = () => {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
             <InfraNode icon={<DiscordIcon />} label="Discord Hub" desc="Communication Channel" />
             <InfraNode icon={<GraduationCap />} label="LMS Node" desc="Learning Management" />
             <InfraNode icon={<GithubIcon />} label="Codebase" desc="Resource Repository" />
             <InfraNode icon={<Box />} label="Polygon" desc="Cyber Exercise Arena" />
             <InfraNode icon={<Database />} label="Vault" desc="Asset Secret Storage" />
+            <InfraNode icon={<Zap />} label="Hard Skill" desc="Knowledge Graph" />
           </div>
         </div>
       </section>
@@ -209,29 +236,103 @@ export const Landing = () => {
       {/* 7. Statistics Section */}
       <section className="py-20 px-6 max-w-7xl mx-auto">
         <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <Stat value="1,024" label="Participants" />
+          <Stat value="15" label="Participants" />
           <Stat value="128" label="Virtual Labs" />
           <Stat value="42" label="Global CTFs" />
           <Stat value="512" label="Write-ups" />
         </div>
       </section>
 
-      {/* 9. Join Section */}
+      {/* 9. Join Section / Contact */}
       <section className="py-32 px-6">
-        <div className="max-w-3xl mx-auto text-center space-y-12">
-          <TechHeader title="Initialize Connection" subtitle="Recruitment Open" />
-          <ClippedContainer className="p-12 space-y-6">
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <input placeholder="Nickname" className="bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-cyan-500" />
-                <select className="bg-white/5 border border-white/10 rounded-xl p-4 text-white/50 focus:outline-none focus:ring-1 focus:ring-cyan-500 appearance-none">
-                    <option>Select Direction</option>
-                    <option>Red Team</option>
-                    <option>Blue Team</option>
-                    <option>OSINT</option>
-                </select>
-             </div>
-             <textarea placeholder="Tell us about your motivation..." className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/20 focus:outline-none focus:ring-1 focus:ring-cyan-500 h-32" />
-             <CyberButton className="w-full py-4 uppercase font-black tracking-widest text-lg">Transmit Application</CyberButton>
+        <div className="max-w-4xl mx-auto text-center space-y-12">
+          <TechHeader title="Initialize Connection" subtitle="Direct Uplink" />
+          
+          <ClippedContainer className="p-8 md:p-12 space-y-8 bg-white/[0.02] border-white/10 relative overflow-hidden group">
+            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none" />
+            
+            <form 
+              onSubmit={async (e) => {
+                e.preventDefault();
+                const form = e.target as HTMLFormElement;
+                const formData = new FormData(form);
+                const data = {
+                  name: formData.get('name'),
+                  email: formData.get('email'),
+                  subject: formData.get('subject') || 'Joint Request',
+                  message: formData.get('message')
+                };
+
+                const btn = form.querySelector('button') as HTMLButtonElement;
+                btn.disabled = true;
+                const originalText = btn.innerText;
+                btn.innerText = "TRANSMITTING...";
+
+                try {
+                  const res = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                  });
+                  if (res.ok) {
+                    alert("TRANSMISSION SUCCESSFUL. OPERATIVES WILL RESPOND.");
+                    form.reset();
+                  } else {
+                    alert("UPLINK FAILURE. RETRY RECOMMENDED.");
+                  }
+                } catch (err) {
+                  alert("NETWORK ERROR. PROXIES DISCONNECTED.");
+                } finally {
+                  btn.disabled = false;
+                  btn.innerText = originalText;
+                }
+              }}
+              className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 text-left"
+            >
+              <div className="space-y-4">
+                <div className="space-y-2">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-white/40 ml-2">Operative Ident</label>
+                  <input name="name" required placeholder="NICKNAME" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/10 focus:outline-none focus:border-cyan-500/50 font-mono text-sm" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-white/40 ml-2">Secure Channel (Email)</label>
+                  <input name="email" type="email" required placeholder="EMAIL@NODE.SYS" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/10 focus:outline-none focus:border-cyan-500/50 font-mono text-sm" />
+                </div>
+                <div className="space-y-2">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-white/40 ml-2">Mission Subject</label>
+                  <input name="subject" placeholder="INTENT" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/10 focus:outline-none focus:border-cyan-500/50 font-mono text-sm" />
+                </div>
+              </div>
+              
+              <div className="space-y-4">
+                <div className="space-y-2 h-full flex flex-col">
+                  <label className="text-[10px] font-mono uppercase tracking-widest text-white/40 ml-2">Communication Payload</label>
+                  <textarea name="message" required placeholder="INPUT DETAILS..." className="flex-1 w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/10 focus:outline-none focus:border-cyan-500/50 font-mono text-sm resize-none h-44 md:h-full" />
+                </div>
+              </div>
+
+              <div className="md:col-span-2 pt-4">
+                <CyberButton type="submit" className="w-full py-5 uppercase font-black tracking-widest text-xl italic flex items-center justify-center gap-3">
+                  <Send className="w-6 h-6" />
+                  INITIALIZE CONNECTION
+                </CyberButton>
+              </div>
+            </form>
+
+            <div className="mt-8 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
+               <div className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-white/30">
+                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
+                  <span>Secure Uplink Active</span>
+                  <span className="hidden md:block">|</span>
+                  <span>AES-256 Encrypted</span>
+               </div>
+               <button 
+                onClick={() => navigate('/contact')}
+                className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 hover:text-white transition-colors flex items-center gap-2 group"
+               >
+                 Open Full Terminal <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+               </button>
+            </div>
           </ClippedContainer>
         </div>
       </section>
@@ -240,12 +341,13 @@ export const Landing = () => {
       <footer className="py-20 px-6 border-t border-white/5">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
           <div className="flex items-center gap-4">
-            <Zap className="text-cyan-400" />
+            <Shield className="text-cyan-400" />
             <span className="font-bold tracking-tighter uppercase italic">UNIVERSAL</span>
           </div>
           <div className="flex gap-8 text-white/40 text-xs uppercase font-mono tracking-widest">
             <a href="#" className="hover:text-cyan-400">Github</a>
             <a href="#" className="hover:text-cyan-400">Discord</a>
+            <button onClick={() => navigate('/contact')} className="hover:text-cyan-400">Uplink</button>
             <a href="#" className="hover:text-cyan-400">System Status</a>
           </div>
           <p className="text-[10px] text-white/20 uppercase tracking-tighter">© 2026 Universal Academy. All rights reserved.</p>
