@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot, doc, updateDoc, limit, addDoc, deleteDoc } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
+import { collection, query, orderBy, onSnapshot, doc, updateDoc, limit, addDoc, deleteDoc, db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { ClippedContainer, TechHeader, CyberButton } from '../components/UI';
 import { ShieldCheck, Terminal, BadgeCheck, XCircle, CheckCircle2, AlertTriangle, Plus, Trash2, Edit2 } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';

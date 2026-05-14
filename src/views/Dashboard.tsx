@@ -3,9 +3,7 @@ import { useAuth } from '../context/AuthContext';
 import { ClippedContainer, TechHeader, CyberButton, ProgressBar, SkillHex } from '../components/UI';
 import { Terminal, Cpu, Users, GraduationCap, Plus, Trash2, Edit3, Save, CheckCircle2, ShieldCheck, Clock, XCircle, BadgeCheck, Zap, Trophy, Target, Award } from 'lucide-react';
 import { motion } from 'motion/react';
-import { db } from '../lib/firebase';
-import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
-import { doc, updateDoc, collection, addDoc, serverTimestamp } from 'firebase/firestore';
+import { db, handleFirestoreError, OperationType, doc, updateDoc, collection, addDoc, serverTimestamp } from '../lib/firebase';
 import { SkillTree } from '../components/SkillTree';
 import { cn } from '../lib/utils';
 
@@ -78,30 +76,30 @@ export const Dashboard = () => {
   return (
     <div className="space-y-8 pb-32">
       {/* Header Stats */}
-      <div className="flex flex-col md:flex-row gap-6">
-          <ClippedContainer className="flex-1 p-8 flex items-center justify-between">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <ClippedContainer className="p-8 flex items-center justify-between border-white/10 bg-white/[0.02]">
               <div className="flex items-center gap-6">
-                  <div className="w-16 h-16 bg-cyan-500/10 border border-cyan-500/50 rounded-2xl flex items-center justify-center glow-blue">
-                      <GraduationCap className="w-8 h-8 text-cyan-400" />
+                  <div className="w-16 h-16 bg-white/[0.03] border border-white/10 rounded-2xl flex items-center justify-center">
+                      <GraduationCap className="w-8 h-8 text-white/40" />
                   </div>
                   <div>
-                      <span className="block text-[8px] text-white/30 uppercase tracking-[0.4em] mb-1 font-mono">Current Rank</span>
-                      <h3 className="text-2xl font-black text-white italic uppercase tracking-tighter leading-none">{profile.role || 'CADET'}</h3>
+                      <span className="block text-[10px] text-white/20 uppercase tracking-[0.2em] mb-1 font-mono font-bold">Current Rank</span>
+                      <h3 className="text-2xl font-bold text-white tracking-tight leading-none uppercase">{profile.role || 'CADET'}</h3>
                   </div>
               </div>
               <div className="text-right">
-                  <span className="block text-[8px] text-white/30 uppercase tracking-[0.4em] mb-1 font-mono">Total Credits</span>
-                  <span className="text-3xl font-black text-cyan-400 italic tracking-tighter leading-none">{(profile.points || 0).toLocaleString()}</span>
+                  <span className="block text-[10px] text-white/20 uppercase tracking-[0.2em] mb-1 font-mono font-bold">Total Credits</span>
+                  <span className="text-3xl font-bold text-blue-400 tracking-tighter leading-none">{(profile.points || 0).toLocaleString()}</span>
               </div>
           </ClippedContainer>
 
-          <ClippedContainer className="flex-1 p-8 min-w-[300px]">
+          <ClippedContainer className="p-8 min-w-[300px] border-white/10 bg-white/[0.02]">
               <div className="flex justify-between items-end mb-4">
                   <div>
-                      <span className="block text-[8px] text-white/30 uppercase tracking-[0.4em] mb-1 font-mono">Node Level</span>
-                      <span className="text-3xl font-black text-white italic tracking-tighter leading-none">LVL {profile.level || 1}</span>
+                      <span className="block text-[10px] text-white/20 uppercase tracking-[0.2em] mb-1 font-mono font-bold">Node Level</span>
+                      <span className="text-3xl font-bold text-white tracking-tight leading-none">LVL {profile.level || 1}</span>
                   </div>
-                  <span className="text-[10px] font-bold text-cyan-400 font-mono uppercase tracking-[0.2em] mb-1">{levelProgress.toFixed(0)}% to NEXT</span>
+                  <span className="text-[10px] font-bold text-blue-400 font-mono uppercase tracking-[0.1em] mb-1">{levelProgress.toFixed(0)}% TO NEXT</span>
               </div>
               <ProgressBar progress={levelProgress} />
           </ClippedContainer>

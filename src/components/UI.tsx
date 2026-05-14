@@ -10,37 +10,27 @@ interface CyberButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement>
 export const CyberButton: React.FC<CyberButtonProps> = ({ 
   children, 
   variant = 'cyan', 
-  glow = true, 
+  glow = false, 
   className, 
   ...props 
 }) => {
   const variants = {
-    cyan: 'bg-cyan-500/10 border-cyan-500/50 text-cyan-400 hover:bg-cyan-500/20 active:scale-95',
-    amber: 'bg-amber-500/10 border-amber-500/50 text-amber-400 hover:bg-amber-500/20 active:scale-95',
-    red: 'bg-red-500/10 border-red-500/50 text-red-400 hover:bg-red-500/20 active:scale-95',
-    ghost: 'bg-transparent border-white/10 text-white/70 hover:bg-white/5 active:scale-95'
-  };
-
-  const glows = {
-    cyan: 'shadow-[0_0_15px_rgba(6,182,212,0.3)]',
-    amber: 'shadow-[0_0_15px_rgba(245,158,11,0.3)]',
-    red: 'shadow-[0_0_15px_rgba(239,68,68,0.3)]',
-    ghost: ''
+    cyan: 'bg-white text-black hover:bg-white/90 active:scale-[0.98]',
+    amber: 'bg-amber-500 text-white hover:bg-amber-600 active:scale-[0.98]',
+    red: 'bg-red-600 text-white hover:bg-red-700 active:scale-[0.98]',
+    ghost: 'bg-transparent border border-white/20 text-white hover:bg-white/5 active:scale-[0.98]'
   };
 
   return (
     <motion.button
-      whileHover={{ y: -2 }}
       whileTap={{ scale: 0.98 }}
       className={cn(
-        'px-6 py-2 border rounded-xl font-medium transition-all duration-300 backdrop-blur-md relative overflow-hidden group',
+        'px-6 py-3 rounded-lg font-bold transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed',
         variants[variant],
-        glow && glows[variant],
         className
       )}
       {...props}
     >
-      <div className="absolute inset-0 bg-white/5 translate-y-full group-hover:translate-y-0 transition-transform duration-300" />
       <span className="relative z-10 flex items-center justify-center gap-2">
         {children}
       </span>
@@ -50,47 +40,33 @@ export const CyberButton: React.FC<CyberButtonProps> = ({
 
 export const GlassContainer: React.FC<{ children: React.ReactNode; className?: string }> = ({ children, className }) => (
   <div className={cn(
-    "bg-white/5 border border-white/10 backdrop-blur-xl rounded-[3.5rem] p-8 shadow-2xl relative overflow-hidden",
+    "bg-[#0a0a0a] border border-white/5 shadow-2xl rounded-2xl md:rounded-[2rem] p-6 md:p-10 relative overflow-hidden",
     className
   )}>
-    <div className="absolute inset-0 bg-gradient-to-br from-white/5 to-transparent pointer-events-none" />
+    <div className="absolute inset-0 bg-gradient-to-br from-white/[0.02] to-transparent pointer-events-none" />
     {children}
   </div>
 );
 
 export const ClippedContainer: React.FC<{ children: React.ReactNode; className?: string; color?: 'cyan' | 'red' | 'amber' }> = ({ children, className, color = 'cyan' }) => {
-  const borderColors = {
-    cyan: 'border-cyan-500/30',
-    red: 'border-red-500/30',
-    amber: 'border-amber-500/30'
-  };
-  
   return (
     <div className={cn(
-      "clipped bg-white/5 border backdrop-blur-md relative overflow-hidden",
-      borderColors[color],
+      "bg-[#0a0a0a] border border-white/5 rounded-xl relative overflow-hidden",
       className
     )}>
-      <div className="absolute top-0 right-0 w-20 h-20 bg-gradient-to-bl from-white/5 to-transparent pointer-events-none" />
       {children}
     </div>
   );
 };
 
 export const TechHeader: React.FC<{ title: string; subtitle?: string; color?: 'cyan' | 'amber' | 'red' }> = ({ title, subtitle, color = 'cyan' }) => {
-  const textColors = {
-    cyan: 'text-cyan-400',
-    amber: 'text-amber-400',
-    red: 'text-red-400'
-  };
-  
   return (
-    <div className="space-y-1">
-      <h2 className={cn("text-3xl font-black tracking-tighter uppercase italic", textColors[color])}>
+    <div className="space-y-2">
+      <h2 className="text-3xl md:text-4xl font-bold tracking-tight text-white">
         {title}
       </h2>
       {subtitle && (
-        <p className="text-[10px] font-mono tracking-[0.4em] text-white/30 uppercase">
+        <p className="text-[10px] font-mono tracking-[0.2em] text-white/30 uppercase font-medium">
           {subtitle}
         </p>
       )}

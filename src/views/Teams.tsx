@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
+import { collection, query, orderBy, onSnapshot, addDoc, serverTimestamp, db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { ClippedContainer, TechHeader, CyberButton } from '../components/UI';
 import { Users, Shield, Zap, TrendingUp, ChevronRight, UserPlus, XCircle } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';

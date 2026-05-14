@@ -25,47 +25,59 @@ import { cn } from './lib/utils';
 const PrivateRoute = ({ children }: { children: React.ReactNode }) => {
   const { user, loading } = useAuth();
   if (loading) return (
-    <div className="min-h-screen bg-[#0a0a0a] flex flex-col items-center justify-center space-y-4">
-      <div className="w-16 h-16 border-t-2 border-cyan-500 rounded-full animate-spin" />
-      <span className="text-cyan-400 font-mono text-[10px] uppercase tracking-[0.3em]">Connecting to HQ...</span>
+    <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center space-y-6">
+      <div className="w-12 h-12 border-2 border-white/5 border-t-white rounded-full animate-spin" />
+      <span className="text-white/20 font-mono text-[10px] uppercase tracking-[0.4em]">Establishing secure link</span>
     </div>
   );
   return user ? <>{children}</> : <Navigate to="/auth" />;
+};
+
+const AdminRoute = ({ children }: { children: React.ReactNode }) => {
+  const { user, isAdmin, loading } = useAuth();
+  if (loading) return (
+    <div className="min-h-screen bg-[#050505] flex flex-col items-center justify-center space-y-6">
+      <div className="w-12 h-12 border-2 border-white/5 border-t-white rounded-full animate-spin" />
+      <span className="text-white/20 font-mono text-[10px] uppercase tracking-[0.4em]">Verifying clearance</span>
+    </div>
+  );
+  return user && isAdmin ? <>{children}</> : <Navigate to="/dashboard" />;
 };
 
 function AppContent() {
   const { user } = useAuth();
 
   return (
-    <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-cyan-500/30 selection:text-cyan-400">
-      <div className="fixed inset-0 bg-grid-white/[0.02] pointer-events-none" />
-      <div className="fixed inset-0 bg-gradient-to-br from-cyan-500/5 via-transparent to-amber-500/5 pointer-events-none" />
-
+    <div className="min-h-screen bg-[#050505] text-[#e2e8f0] selection:bg-white/10 selection:text-white">
+      <div className="fixed inset-0 bg-grid-white opacity-[0.03] pointer-events-none" />
+      
       {user && <Navigation />}
       
       <div className={cn(
-        "relative transition-all duration-500",
+        "relative transition-all duration-200",
         user ? "lg:pl-72" : ""
       )}>
-        <div className={cn(
-          "max-w-7xl mx-auto px-6 pb-12",
-          user ? "pt-28 lg:pt-12" : "py-12"
+        <main className={cn(
+          "max-w-7xl mx-auto px-4 sm:px-6 md:px-8 pb-12",
+          user ? "pt-24 lg:pt-12" : "py-8 md:py-16"
         )}>
           {user && (
-            <header className="flex items-center justify-between mb-16 px-4">
+            <header className="flex flex-col sm:flex-row sm:items-center justify-between mb-8 md:mb-16 gap-4 sm:gap-0">
               <div className="flex flex-col">
-                <h1 className="text-xl font-black tracking-tighter uppercase italic leading-none">Command Center</h1>
-                <span className="text-[8px] font-mono tracking-[0.4em] text-white/40 uppercase mt-1">Operational Status: Nominal</span>
+                <h1 className="text-2xl md:text-3xl font-bold tracking-tight text-white leading-none">Command Center</h1>
+                <span className="text-[10px] font-mono tracking-[0.2em] text-white/30 uppercase mt-2">v4.2.0-STABLE | SECURE Uplink Established</span>
               </div>
 
-              <div className="hidden md:flex items-center gap-8 text-white/20 font-mono text-[10px] uppercase tracking-widest">
+              <div className="flex items-center gap-6 text-white/40 font-mono text-[10px] uppercase tracking-widest border-t sm:border-t-0 border-white/5 pt-4 sm:pt-0">
                 <div className="flex items-center gap-2">
-                  <Shield className="w-3 h-3 text-cyan-400" />
-                  <span>Shields: Active</span>
+                  <Shield className="w-3.5 h-3.5" />
+                  <span className="hidden sm:inline">Encrypted</span>
+                  <span className="sm:hidden">Secure</span>
                 </div>
+                <div className="w-px h-3 bg-white/10 hidden sm:block" />
                 <div className="flex items-center gap-2">
-                  <Terminal className="w-3 h-3 text-amber-500" />
-                  <span>Uplink: Secure</span>
+                  <Terminal className="w-3.5 h-3.5" />
+                  <span>Real-time</span>
                 </div>
               </div>
             </header>
@@ -84,12 +96,12 @@ function AppContent() {
             <Route path="/academy" element={<PrivateRoute><Academy /></PrivateRoute>} />
             <Route path="/hard-skills" element={<PrivateRoute><HardSkills /></PrivateRoute>} />
             <Route path="/teams" element={<PrivateRoute><Teams /></PrivateRoute>} />
-            <Route path="/moderation" element={<PrivateRoute><Moderation /></PrivateRoute>} />
-            <Route path="/admin/users" element={<PrivateRoute><UserManagement /></PrivateRoute>} />
+            <Route path="/moderation" element={<AdminRoute><Moderation /></AdminRoute>} />
+            <Route path="/admin/users" element={<AdminRoute><UserManagement /></AdminRoute>} />
             <Route path="/profile/:id" element={<PrivateRoute><Profile /></PrivateRoute>} />
             <Route path="/contact" element={<Contact />} />
           </Routes>
-        </div>
+        </main>
       </div>
     </div>
   );

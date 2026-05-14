@@ -1,10 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
-import { db, auth } from '../lib/firebase';
-import { 
-  collection, query, getDocs, doc, deleteDoc, updateDoc, 
-  onSnapshot, orderBy, limit 
-} from 'firebase/firestore';
+import { db, auth, collection, query, getDocs, doc, deleteDoc, updateDoc, onSnapshot, orderBy, limit } from '../lib/firebase';
 import { 
   Users, UserPlus, Shield, Trash2, Edit3, 
   Search, ShieldAlert, CheckCircle2, XCircle, 
@@ -59,7 +55,7 @@ export const UserManagement = () => {
 
     try {
       const token = await user?.getIdToken();
-      const response = await fetch('/api/admin/create-user', {
+      const response = await fetch('/api/admin/users', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -85,6 +81,25 @@ export const UserManagement = () => {
     }
   };
 
+  const setUserRole = async (userId: string, currentRole: string) => {
+    const newRole = currentRole === 'admin' ? 'student' : 'admin';
+    try {
+      const token = await user?.getIdToken();
+      const response = await fetch('/api/admin/users/role', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ uid: userId, role: newRole })
+      });
+      if (!response.ok) throw new Error("Role update failed.");
+    } catch (err) {
+      console.error("Failed to update role:", err);
+      alert("Role update failed.");
+    }
+  };
+
   const toggleUserStatus = async (userId: string, currentDisabled: boolean) => {
     try {
       await updateDoc(doc(db, 'users', userId), {
@@ -99,11 +114,18 @@ export const UserManagement = () => {
   const deleteUser = async (userId: string) => {
     if (!window.confirm("ARE YOU SURE? THIS OPERATION IS IRREVERSIBLE.")) return;
     try {
-      // Note: This only deletes Firestore profile. 
-      // Real deletion of Auth account should be handled via server/Admin SDK for security.
-      await deleteDoc(doc(db, 'users', userId));
+      const token = await user?.getIdToken();
+      const response = await fetch(`/api/admin/users/${userId}`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (!response.ok) throw new Error("Delete failed.");
+      alert("Operative purged from system.");
     } catch (err) {
       console.error("Failed to delete user:", err);
+      alert("Delete failed.");
     }
   };
 
@@ -177,6 +199,13 @@ export const UserManagement = () => {
                     </div>
                   </div>
                   <div className="flex gap-2">
+                    <button 
+                      onClick={() => setUserRole(u.id, u.role)}
+                      className="p-2 rounded-lg border border-amber-500/20 text-amber-500/40 hover:text-amber-500 hover:bg-amber-500/10 transition-colors"
+                      title="Toggle Role"
+                    >
+                      <Shield className="w-4 h-4" />
+                    </button>
                     <button 
                       onClick={() => toggleUserStatus(u.id, u.disabled)}
                       className={`p-2 rounded-lg border transition-colors ${

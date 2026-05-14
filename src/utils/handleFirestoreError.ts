@@ -1,5 +1,3 @@
-import { Auth } from 'firebase/auth';
-
 export enum OperationType {
   CREATE = 'create',
   UPDATE = 'update',
@@ -9,45 +7,6 @@ export enum OperationType {
   WRITE = 'write',
 }
 
-export interface FirestoreErrorInfo {
-  error: string;
-  operationType: OperationType;
-  path: string | null;
-  authInfo: {
-    userId?: string | null;
-    email?: string | null;
-    emailVerified?: boolean | null;
-    isAnonymous?: boolean | null;
-    tenantId?: string | null;
-    providerInfo?: {
-      providerId?: string | null;
-      email?: string | null;
-    }[];
-  }
-}
-
-/**
- * Optimized error handler for Firebase integration.
- * In a real production app, you might want to log this to a service like Sentry or LogRocket.
- */
-export function handleFirestoreError(error: any, operationType: OperationType, path: string | null, auth?: any) {
-  const errInfo: FirestoreErrorInfo = {
-    error: error instanceof Error ? error.message : String(error),
-    authInfo: {
-      userId: auth?.currentUser?.uid,
-      email: auth?.currentUser?.email,
-      emailVerified: auth?.currentUser?.emailVerified,
-      isAnonymous: auth?.currentUser?.isAnonymous,
-      tenantId: auth?.currentUser?.tenantId,
-      providerInfo: auth?.currentUser?.providerData?.map((provider: any) => ({
-        providerId: provider.providerId,
-        email: provider.email,
-      })) || []
-    },
-    operationType,
-    path
-  };
-  
-  console.error('Firestore Error: ', JSON.stringify(errInfo));
-  throw new Error(JSON.stringify(errInfo));
+export function handleFirestoreError(error: any) {
+  console.error("Mock FireStore Error:", error);
 }

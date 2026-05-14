@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, orderBy, limit, onSnapshot } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
+import { collection, query, orderBy, limit, onSnapshot, db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { ClippedContainer, TechHeader } from '../components/UI';
 import { Trophy, Medal, Target, TrendingUp, Zap, Crown, ShieldCheck, Flame, Star, Search, Activity } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';

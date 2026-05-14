@@ -1,89 +1,81 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&family=JetBrains+Mono&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;700&family=JetBrains+Mono&display=swap');
 @import "tailwindcss";
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Space Grotesk", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-  --color-cyber-black: #0a0a0a;
+  
+  --color-cyber-black: #050505;
   --color-cyber-blue: #0ea5e9;
-  --color-cyber-red: #ef4444;
-  --color-cyber-amber: #f59e0b;
+  --color-cyber-slate: #1e293b;
+  --color-cyber-surface: #0f172a;
 }
 
 @utility bg-grid-white {
-  mask-image: radial-gradient(circle at center, white, transparent 80%);
-  background-size: 40px 40px;
+  mask-image: radial-gradient(circle at center, white, transparent 90%);
+  background-size: 50px 50px;
   background-image: 
-    linear-gradient(to right, var(--color-white) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--color-white) 1px, transparent 1px);
+    linear-gradient(to right, rgba(255,255,255,0.02) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(255,255,255,0.02) 1px, transparent 1px);
 }
 
 @utility scanlines {
   background: linear-gradient(
     to bottom,
     transparent 50%,
-    rgba(0, 0, 0, 0.5) 50%
+    rgba(0, 0, 0, 0.2) 50%
   );
   background-size: 100% 4px;
   pointer-events: none;
-}
-
-@utility clipped {
-  clip-path: polygon(
-    0 20px,
-    20px 0,
-    100% 0,
-    100% calc(100% - 20px),
-    calc(100% - 20px) 100%,
-    0 100%
-  );
+  opacity: 0.3;
 }
 
 @utility glow-blue {
-  filter: drop-shadow(0 0 15px rgba(14, 165, 233, 0.4));
-}
-
-@utility glow-blue-sm {
-  filter: drop-shadow(0 0 5px rgba(14, 165, 233, 0.3));
-}
-
-@utility glow-red {
-  filter: drop-shadow(0 0 10px rgba(239, 68, 68, 0.5));
-}
-
-@keyframes cyber-flicker {
-  0%, 19.999%, 22%, 62.999%, 64%, 64.999%, 70%, 100% {
-    opacity: 1;
-    text-shadow: 0 0 10px rgba(14, 165, 233, 0.5);
-  }
-  20%, 21.999%, 63%, 63.999%, 65%, 69.999% {
-    opacity: 0.4;
-    text-shadow: none;
-  }
-}
-
-.animate-cyber-flicker {
-  animation: cyber-flicker 4s infinite linear;
+  filter: drop-shadow(0 0 10px rgba(14, 165, 233, 0.2));
 }
 
 body {
   background-color: var(--color-cyber-black);
-  color: white;
+  color: #e2e8f0;
   -webkit-font-smoothing: antialiased;
   overflow-x: hidden;
+  font-family: var(--font-sans);
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  letter-spacing: -0.02em;
 }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #0a0a0a;
+  background: #050505;
 }
 ::-webkit-scrollbar-thumb {
-  background: #1a1a1a;
+  background: #1e293b;
   border-radius: 10px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #252525;
+  background: #334155;
+}
+
+/* Responsive Containers */
+.container-responsive {
+  width: 100%;
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container-responsive {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
 }

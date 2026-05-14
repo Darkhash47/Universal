@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, where, orderBy, onSnapshot, limit } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
+import { collection, query, where, orderBy, onSnapshot, limit, db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { useAuth } from '../context/AuthContext';
 import { ClippedContainer, TechHeader } from '../components/UI';
 import { Bell, Info, ShieldAlert, Zap, Clock } from 'lucide-react';

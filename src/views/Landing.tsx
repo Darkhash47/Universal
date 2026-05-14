@@ -14,400 +14,201 @@ import { useAuth } from '../context/AuthContext';
 export const Landing = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const { scrollYProgress } = useScroll();
-  const opacity = useTransform(scrollYProgress, [0, 0.1], [1, 0]);
-  const scale = useTransform(scrollYProgress, [0, 0.1], [1, 0.95]);
 
   return (
-    <div className="relative">
-      {/* 1. Hero Section */}
-      <section className="relative min-h-screen flex flex-col items-center justify-center pt-32 pb-24 overflow-hidden">
-        {/* Background Ambient Effects */}
-        <div className="absolute inset-0 z-0">
-          <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-cyan-500/10 blur-[120px] rounded-full animate-pulse" />
-          <div className="absolute bottom-1/4 right-1/4 w-[500px] h-[500px] bg-blue-600/5 blur-[150px] rounded-full animate-pulse" style={{ animationDelay: '2s' }} />
-          <div className="absolute inset-0 bg-grid-white opacity-[0.03] scale-150" />
-        </div>
+    <div className="relative bg-[#050505]">
+      {/* Hero Section */}
+      <section className="relative min-h-[90vh] flex flex-col items-center justify-center px-4 pt-20 pb-32 overflow-hidden">
+        <div className="absolute inset-0 bg-grid-white opacity-[0.03] pointer-events-none" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[1000px] h-[500px] bg-blue-500/5 blur-[150px] rounded-full pointer-events-none" />
 
-        <motion.div style={{ opacity, scale }} className="text-center space-y-10 md:space-y-12 z-10 relative">
-          <div className="relative group px-4">
-             {/* Large UNIVERSAL Text */}
-             <motion.h1 
-               initial={{ opacity: 0, scale: 0.95 }}
-               animate={{ opacity: 1, scale: 1 }}
-               transition={{ duration: 1.2, ease: [0.16, 1, 0.3, 1] }}
-               className="text-5xl sm:text-7xl md:text-9xl lg:text-[11rem] font-black italic tracking-tighter leading-[0.8] select-none relative group"
-             >
-                <span className="relative inline-block text-transparent bg-clip-text bg-gradient-to-b from-white via-neutral-200 to-white/30 drop-shadow-[0_0_20px_rgba(6,182,212,0.6)] animate-cyber-flicker">
-                  UNIVERSAL
-                </span>
-                
-                {/* Accent glow on hover */}
-                <div className="absolute inset-0 bg-cyan-500/10 blur-[100px] opacity-0 group-hover:opacity-100 transition-opacity duration-1000 pointer-events-none" />
-             </motion.h1>
-             
-             {/* Accent line below */}
-             <motion.div 
-               initial={{ width: 0 }}
-               animate={{ width: "100%" }}
-               transition={{ delay: 0.5, duration: 1 }}
-               className="h-px bg-gradient-to-r from-transparent via-cyan-400/50 to-transparent max-w-lg mx-auto mt-4"
-             />
+        <motion.div 
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="text-center space-y-8 z-10 max-w-4xl"
+        >
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/5 border border-white/10 mb-4 animate-pulse">
+            <div className="w-1 h-1 rounded-full bg-blue-500" />
+            <span className="text-[10px] font-mono tracking-[0.2em] text-white/50 uppercase">v4.0 Security Protocol</span>
           </div>
+          
+          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl font-bold tracking-tighter text-white leading-[0.9]">
+            ACADEMY
+          </h1>
+          
+          <p className="text-white/40 text-sm md:text-xl max-w-2xl mx-auto font-medium leading-relaxed">
+            The next generation of cybersecurity training. Minimalist by design, 
+            powerful by nature. Master offensive and defensive operations in a 
+            controlled environment.
+          </p>
 
-          <div className="space-y-6 max-w-3xl mx-auto px-6">
-            <h2 className="text-2xl md:text-4xl font-bold text-white uppercase italic tracking-tighter glow-blue-sm">
-              Universal Cybersecurity Academy
-            </h2>
-            <p className="text-white/40 text-sm md:text-xl leading-relaxed font-mono tracking-tight">
-              Next-gen cybersecurity platform for digital operatives. 
-              Master offensive and defensive skills through immersive tactical training.
-            </p>
-          </div>
-
-          <div className="flex items-center justify-center gap-6 pt-6">
-            <CyberButton onClick={() => user ? navigate('/dashboard') : navigate('/auth')} className="px-10 md:px-16 py-4 md:py-5 text-xl md:text-2xl font-black italic">
-              <Rocket className="w-6 h-6" />
-              JOIN PROJECT
+          <div className="flex items-center justify-center pt-8">
+            <CyberButton 
+              onClick={() => user ? navigate('/dashboard') : navigate('/auth')} 
+              className="px-12 py-5 text-lg tracking-widest"
+            >
+              INITIALIZE
             </CyberButton>
           </div>
         </motion.div>
-
-        {/* Decorative background grid */}
-        <div className="absolute inset-x-0 bottom-0 h-1/2 bg-gradient-to-t from-cyan-500/10 to-transparent pointer-events-none" />
       </section>
 
-      {/* 2. About Project */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-20 items-center">
+      {/* Mission Section */}
+      <section className="container-responsive py-24 border-t border-white/5">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
           <div className="space-y-8">
             <TechHeader title="Protocol Vision" subtitle="The Academy Mission" />
-            <div className="space-y-6 text-white/60 text-lg leading-relaxed">
+            <div className="space-y-6 text-white/50 text-base md:text-lg leading-relaxed font-medium">
               <p>
-                UNIVERSAL is more than just a course; it's a living ecosystem where education meets real-world tactical operations. 
-                We bridge the gap between theoretical knowledge and field expertise.
+                ACADEMY is a cutting-edge ecosystem designed to bridge the gap between theoretical knowledge 
+                and high-stakes tactical execution. We provide the infrastructure for the next generation 
+                of digital operatives.
               </p>
-              <p className="border-l-2 border-cyan-500/50 pl-6 italic">
-                "In the digital domain, silence is security. Proficiency is survival."
-              </p>
-              <div className="grid grid-cols-2 gap-4 pt-4">
-                <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                  <span className="block text-cyan-400 font-bold mb-1">Practical 1st</span>
-                  <span className="text-xs">Real-world cases & live environments.</span>
-                </div>
-                <div className="bg-white/5 p-4 rounded-xl border border-white/10">
-                  <span className="block text-amber-400 font-bold mb-1">Collaboration</span>
-                  <span className="text-xs">Squad-based learning & research.</span>
-                </div>
+              <div className="pl-6 border-l-2 border-white/10 italic text-white/30 text-sm">
+                "In the digital domain, proficiency is the only true firewall."
               </div>
             </div>
           </div>
-          <div className="relative">
-            <div className="absolute inset-0 bg-cyan-500/10 blur-[100px] rounded-full" />
-            <ClippedContainer className="p-8 aspect-video flex items-center justify-center group overflow-hidden">
-                <div className="grid grid-cols-8 gap-1 opacity-20">
-                    {Array.from({ length: 64 }).map((_, i) => (
-                        <div key={i} className="w-full aspect-square bg-cyan-500/50 group-hover:bg-cyan-400 transition-colors duration-500" />
-                    ))}
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center">
-                    <Shield className="w-24 h-24 text-cyan-400 transition-transform group-hover:scale-110 duration-500" />
-                </div>
-            </ClippedContainer>
+          <div className="relative aspect-video bg-white/[0.02] border border-white/5 rounded-2xl flex items-center justify-center overflow-hidden">
+             <Shield className="w-24 h-24 text-white/5" />
+             <div className="absolute inset-0 bg-gradient-to-br from-blue-500/5 to-transparent" />
           </div>
         </div>
       </section>
 
-      {/* 3. Directions / Teams */}
-      <section className="py-32 px-6 bg-white/[0.02]">
-        <div className="max-w-7xl mx-auto space-y-16">
-          <div className="text-center space-y-4">
-            <TechHeader title="Operational Units" subtitle="Choose your specialization" />
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <DirectionCard 
-              icon={<Target className="text-red-400" />}
-              title="Red Team"
-              desc="Offensive security and penetration testing logic. Break the perimeter."
-              color="red"
-            />
-            <DirectionCard 
-              icon={<Shield className="text-cyan-400" />}
-              title="Blue Team"
-              desc="Defensive infrastructure and incident response. Secure the node."
-              color="cyan"
-            />
-            <DirectionCard 
-              icon={<Search className="text-amber-400" />}
-              title="OSINT"
-              desc="Intelligence gathering and social engineering research."
-              color="amber"
-            />
-            <DirectionCard 
-              icon={<Lock className="text-purple-400" />}
-              title="Cryptography"
-              desc="Modern encryption protocols and mathematical defense."
-              color="ghost"
-            />
-            <DirectionCard 
-              icon={<Eye className="text-green-400" />}
-              title="Digital Forensics"
-              desc="Evidence extraction and digital footprint analysis."
-              color="ghost"
-            />
-            <DirectionCard 
-              icon={<Bug className="text-orange-400" />}
-              title="Malware Analysis"
-              desc="Deconstruction of advanced persistent threats."
-              color="ghost"
-            />
-          </div>
+      {/* Grid Features */}
+      <section className="container-responsive py-24 mb-12">
+        <div className="mb-16 text-center">
+           <TechHeader title="Core Directions" subtitle="Operational Specializations" />
         </div>
-      </section>
-
-      {/* 4. Practical Activities */}
-      <section className="py-32 px-6 max-w-7xl mx-auto">
-        <TechHeader title="Combat Operations" subtitle="Field Exercises" />
-        <div className="mt-16 grid grid-cols-1 md:grid-cols-2 gap-4">
-          <ActivityItem 
-            title="CTF Competitions" 
-            desc="Weekly Jeopardy and Attack-Defense style events." 
-            icon={<Award />}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <DirectionCard 
+            icon={<Target className="w-6 h-6" />}
+            title="Red Team"
+            desc="Offensive operations and penetration testing methodologies."
           />
-          <ActivityItem 
-            title="Cyber Exercises" 
-            desc="Full-scale infrastructure penetration simulations." 
-            icon={<Activity />}
+          <DirectionCard 
+            icon={<Shield className="w-6 h-6" />}
+            title="Blue Team"
+            desc="Defensive hardening and real-time incident response protocols."
           />
-          <ActivityItem 
-            title="Knowledge Base" 
-            desc="Deep-dive write-ups from real-world investigations." 
-            icon={<BookOpen />}
+          <DirectionCard 
+            icon={<Search className="w-6 h-6" />}
+            title="OSINT"
+            desc="Intelligence gathering and social engineering research."
           />
-          <ActivityItem 
-            title="Virtual Labs" 
-            desc="Isolated sandboxes for safe exploit testing." 
-            icon={<Cpu />}
+          <DirectionCard 
+            icon={<Lock className="w-6 h-6" />}
+            title="Cryptography"
+            desc="Advanced encryption standards and mathematical defense."
+          />
+          <DirectionCard 
+            icon={<Cpu className="w-6 h-6" />}
+            title="Forensics"
+            desc="Evidence extraction and digital footprint analysis."
+          />
+          <DirectionCard 
+            icon={<Bug className="w-6 h-6" />}
+            title="Malware"
+            desc="Deconstruction and analysis of persistent threats."
           />
         </div>
       </section>
 
-      {/* 5. Infrastructure */}
-      <section className="py-32 px-6 relative overflow-hidden">
-        <div className="absolute inset-0 bg-cyan-900/5 pointer-events-none" />
-        <div className="max-w-7xl mx-auto space-y-16 relative">
-          <div className="flex items-end justify-between">
-            <TechHeader title="System Architecture" subtitle="Infrastructure Overview" />
-            <div className="hidden lg:block h-px flex-1 mx-12 bg-white/10" />
-            <div className="bg-white/5 px-4 py-2 rounded-lg border border-white/10 text-[10px] font-mono uppercase tracking-widest">
-              State: Balanced
-            </div>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-6 gap-6">
-            <InfraNode icon={<DiscordIcon />} label="Discord Hub" desc="Communication Channel" />
-            <InfraNode icon={<GraduationCap />} label="LMS Node" desc="Learning Management" />
-            <InfraNode icon={<GithubIcon />} label="Codebase" desc="Resource Repository" />
-            <InfraNode icon={<Box />} label="Polygon" desc="Cyber Exercise Arena" />
-            <InfraNode icon={<Database />} label="Vault" desc="Asset Secret Storage" />
-            <InfraNode icon={<Zap />} label="Hard Skill" desc="Knowledge Graph" />
+      {/* Combat Operations */}
+      <section className="bg-white/[0.01] border-y border-white/5">
+        <div className="container-responsive py-24">
+          <TechHeader title="Operational Training" subtitle="Field Exercises" />
+          <div className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
+            <OperationItem label="Jeopardy CTF" desc="Weekly signal capture competitions" />
+            <OperationItem label="Live Range" desc="Simulated enterprise infrastructure" />
+            <OperationItem label="Threat Int" desc="Real-world case study analysis" />
+            <OperationItem label="Sandbox" desc="Isolated exploit development labs" />
           </div>
         </div>
       </section>
 
-      {/* 6. Learning System */}
-      <section className="py-32 px-6 max-w-7xl mx-auto bg-white/5 rounded-[4rem] border border-white/10">
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 p-8 md:p-16">
-          <div className="space-y-6">
-            <TechHeader title="Career Path" subtitle="Operative Progression" />
-            <p className="text-white/40 text-sm leading-relaxed">
-              Our structured curriculum guides you from the fundamental logic of networking to advanced red teaming.
-            </p>
+      {/* Progression */}
+      <section className="container-responsive py-24">
+        <div className="max-w-4xl mx-auto space-y-12">
+          <div className="text-center">
+            <TechHeader title="Progression Path" subtitle="Operative Lifecycle" />
           </div>
-          <div className="lg:col-span-2 space-y-4">
-            <ProgressStep level="01" title="Cadet" desc="Mastering Linux, Networking, and Basic Scripting." />
-            <ProgressStep level="02" title="Operative" desc="Active participation in labs and team exercises." />
-            <ProgressStep level="03" title="Specialist" desc="Expertise in a chosen direction and research lead." />
+          <div className="space-y-4">
+            <ProgressStep level="01" title="Cadet" desc="Core fundamentals of Unix systems and networking." />
+            <ProgressStep level="02" title="Operative" desc="Active engagement in simulated range environments." />
+            <ProgressStep level="03" title="Specialist" desc="Domain-specific expertise and research leadership." />
           </div>
         </div>
       </section>
 
-      {/* 7. Statistics Section */}
-      <section className="py-20 px-6 max-w-7xl mx-auto">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
-          <Stat value="15" label="Participants" />
-          <Stat value="128" label="Virtual Labs" />
-          <Stat value="42" label="Global CTFs" />
-          <Stat value="512" label="Write-ups" />
-        </div>
-      </section>
-
-      {/* 9. Join Section / Contact */}
-      <section className="py-32 px-6">
-        <div className="max-w-4xl mx-auto text-center space-y-12">
-          <TechHeader title="Initialize Connection" subtitle="Direct Uplink" />
-          
-          <ClippedContainer className="p-8 md:p-12 space-y-8 bg-white/[0.02] border-white/10 relative overflow-hidden group">
-            <div className="absolute inset-0 bg-gradient-to-br from-cyan-500/5 to-transparent pointer-events-none" />
-            
-            <form 
-              onSubmit={async (e) => {
-                e.preventDefault();
-                const form = e.target as HTMLFormElement;
-                const formData = new FormData(form);
-                const data = {
-                  name: formData.get('name'),
-                  email: formData.get('email'),
-                  subject: formData.get('subject') || 'Joint Request',
-                  message: formData.get('message')
-                };
-
-                const btn = form.querySelector('button') as HTMLButtonElement;
-                btn.disabled = true;
-                const originalText = btn.innerText;
-                btn.innerText = "TRANSMITTING...";
-
-                try {
-                  const res = await fetch('/api/contact', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify(data)
-                  });
-                  if (res.ok) {
-                    alert("TRANSMISSION SUCCESSFUL. OPERATIVES WILL RESPOND.");
-                    form.reset();
-                  } else {
-                    alert("UPLINK FAILURE. RETRY RECOMMENDED.");
-                  }
-                } catch (err) {
-                  alert("NETWORK ERROR. PROXIES DISCONNECTED.");
-                } finally {
-                  btn.disabled = false;
-                  btn.innerText = originalText;
-                }
-              }}
-              className="grid grid-cols-1 md:grid-cols-2 gap-6 relative z-10 text-left"
-            >
-              <div className="space-y-4">
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono uppercase tracking-widest text-white/40 ml-2">Operative Ident</label>
-                  <input name="name" required placeholder="NICKNAME" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/10 focus:outline-none focus:border-cyan-500/50 font-mono text-sm" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono uppercase tracking-widest text-white/40 ml-2">Secure Channel (Email)</label>
-                  <input name="email" type="email" required placeholder="EMAIL@NODE.SYS" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/10 focus:outline-none focus:border-cyan-500/50 font-mono text-sm" />
-                </div>
-                <div className="space-y-2">
-                  <label className="text-[10px] font-mono uppercase tracking-widest text-white/40 ml-2">Mission Subject</label>
-                  <input name="subject" placeholder="INTENT" className="w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/10 focus:outline-none focus:border-cyan-500/50 font-mono text-sm" />
-                </div>
-              </div>
-              
-              <div className="space-y-4">
-                <div className="space-y-2 h-full flex flex-col">
-                  <label className="text-[10px] font-mono uppercase tracking-widest text-white/40 ml-2">Communication Payload</label>
-                  <textarea name="message" required placeholder="INPUT DETAILS..." className="flex-1 w-full bg-white/5 border border-white/10 rounded-xl p-4 text-white placeholder:text-white/10 focus:outline-none focus:border-cyan-500/50 font-mono text-sm resize-none h-44 md:h-full" />
-                </div>
-              </div>
-
-              <div className="md:col-span-2 pt-4">
-                <CyberButton type="submit" className="w-full py-5 uppercase font-black tracking-widest text-xl italic flex items-center justify-center gap-3">
-                  <Send className="w-6 h-6" />
-                  INITIALIZE CONNECTION
-                </CyberButton>
-              </div>
-            </form>
-
-            <div className="mt-8 pt-8 border-t border-white/5 flex flex-col md:flex-row items-center justify-between gap-6">
-               <div className="flex items-center gap-4 text-[10px] font-mono uppercase tracking-widest text-white/30">
-                  <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse" />
-                  <span>Secure Uplink Active</span>
-                  <span className="hidden md:block">|</span>
-                  <span>AES-256 Encrypted</span>
-               </div>
-               <button 
-                onClick={() => navigate('/contact')}
-                className="text-[10px] font-mono uppercase tracking-widest text-cyan-400 hover:text-white transition-colors flex items-center gap-2 group"
-               >
-                 Open Full Terminal <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-               </button>
-            </div>
-          </ClippedContainer>
+      {/* Stats Section */}
+      <section className="border-t border-white/5 bg-white/[0.01]">
+        <div className="container-responsive py-16 md:py-24">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
+            <StatItem value="25k+" label="OPERATIVES" />
+            <StatItem value="142" label="NODES ACTIVE" />
+            <StatItem value="0.4ms" label="LATENCY" />
+            <StatItem value="99.9%" label="UPTIME" />
+          </div>
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-20 px-6 border-t border-white/5">
-        <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-8">
-          <div className="flex items-center gap-4">
-            <Shield className="text-cyan-400" />
-            <span className="font-bold tracking-tighter uppercase italic">UNIVERSAL</span>
+      <footer className="container-responsive py-12 md:py-20 border-t border-white/5">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
+          <div className="flex items-center gap-3">
+            <div className="w-6 h-6 bg-white rounded flex items-center justify-center">
+              <Shield className="w-4 h-4 text-black" />
+            </div>
+            <span className="font-bold tracking-tight text-white uppercase text-sm">Academy Systems</span>
           </div>
-          <div className="flex gap-8 text-white/40 text-xs uppercase font-mono tracking-widest">
-            <a href="#" className="hover:text-cyan-400">Github</a>
-            <a href="#" className="hover:text-cyan-400">Discord</a>
-            <button onClick={() => navigate('/contact')} className="hover:text-cyan-400">Uplink</button>
-            <a href="#" className="hover:text-cyan-400">System Status</a>
+          <div className="flex gap-8 text-white/30 text-[10px] font-bold uppercase tracking-widest">
+            <a href="#" className="hover:text-white transition-colors">Github</a>
+            <a href="#" className="hover:text-white transition-colors">Discord</a>
+            <a href="#" className="hover:text-white transition-colors">Privacy</a>
           </div>
-          <p className="text-[10px] text-white/20 uppercase tracking-tighter">© 2026 Universal Academy. All rights reserved.</p>
+          <p className="text-[10px] text-white/20 font-mono">© 2026 ACADEMY.SYS | ALL RIGHTS RESERVED.</p>
         </div>
       </footer>
     </div>
   );
 };
 
-const DirectionCard = ({ icon, title, desc, color }: { icon: any, title: string, desc: string, color: any }) => (
-  <motion.div whileHover={{ y: -5 }} className="group">
-    <ClippedContainer color={color} className="p-8 h-full space-y-4 hover:bg-white/[0.07] transition-colors">
-      <div className="bg-white/5 p-4 w-fit rounded-2xl group-hover:scale-110 transition-transform">
-        {React.cloneElement(icon as React.ReactElement, { className: "w-8 h-8" })}
-      </div>
-      <h3 className="text-xl font-bold text-white uppercase italic tracking-tighter">{title}</h3>
-      <p className="text-sm text-white/40 leading-relaxed">{desc}</p>
-      <div className="pt-4 flex items-center text-[10px] uppercase font-bold text-cyan-400 tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-        Initialize Protocol <ChevronRight className="w-4 h-4 ml-1" />
-      </div>
-    </ClippedContainer>
-  </motion.div>
-);
-
-const ActivityItem = ({ title, desc, icon }: { title: string, desc: string, icon: any }) => (
-  <div className="p-6 bg-white/5 border border-white/10 rounded-2xl flex gap-6 hover:border-white/30 transition-colors group">
-    <div className="bg-cyan-500/10 p-4 rounded-xl text-cyan-400 group-hover:bg-cyan-500 group-hover:text-black transition-colors shrink-0 h-fit">
-      {React.cloneElement(icon as React.ReactElement, { className: "w-6 h-6" })}
+const DirectionCard = ({ icon, title, desc }: { icon: React.ReactNode, title: string, desc: string }) => (
+  <div className="p-8 border border-white/5 rounded-2xl bg-white/[0.02] hover:bg-white/[0.04] transition-all group">
+    <div className="mb-4 text-white/20 group-hover:text-white transition-colors">
+      {icon}
     </div>
-    <div className="space-y-1">
-      <h4 className="text-white font-bold">{title}</h4>
-      <p className="text-white/40 text-xs leading-relaxed">{desc}</p>
-    </div>
+    <h3 className="text-lg font-bold text-white mb-2 tracking-tight group-hover:text-blue-400 transition-colors uppercase">{title}</h3>
+    <p className="text-white/40 text-xs leading-relaxed font-medium">{desc}</p>
   </div>
 );
 
-const InfraNode = ({ icon, label, desc }: { icon: any, label: string, desc: string }) => (
-  <div className="text-center group p-4 border border-white/5 rounded-2xl hover:bg-white/5 transition-all">
-    <div className="mx-auto w-16 h-16 rounded-full border border-white/10 flex items-center justify-center text-white/40 group-hover:text-cyan-400 group-hover:border-cyan-500/50 transition-all mb-4">
-      {React.cloneElement(icon as React.ReactElement, { className: "w-8 h-8" })}
+const OperationItem = ({ label, desc }: { label: string, desc: string }) => (
+  <div className="p-6 border border-white/5 rounded-xl bg-white/[0.02] flex items-center justify-between group hover:border-white/10 transition-colors">
+    <div>
+      <h4 className="text-sm font-bold text-white mb-0.5 uppercase tracking-wider">{label}</h4>
+      <p className="text-[11px] text-white/30 font-medium">{desc}</p>
     </div>
-    <h5 className="text-xs font-bold text-white uppercase tracking-tighter mb-1">{label}</h5>
-    <p className="text-[10px] text-white/30 uppercase tracking-widest">{desc}</p>
+    <ChevronRight className="w-4 h-4 text-white/10 group-hover:text-white transition-all group-hover:translate-x-1" />
   </div>
 );
 
 const ProgressStep = ({ level, title, desc }: { level: string, title: string, desc: string }) => (
-  <div className="group relative flex items-center gap-8 p-6 lg:p-8 bg-white/5 rounded-2xl hover:bg-white/10 transition-colors">
-    <div className="text-4xl lg:text-6xl font-black text-white/10 italic group-hover:text-cyan-500/20 transition-colors">{level}</div>
-    <div className="space-y-1">
-      <h4 className="text-xl font-bold text-white uppercase italic">{title}</h4>
-      <p className="text-white/40 text-xs tracking-wide">{desc}</p>
+  <div className="p-6 md:p-8 border border-white/5 rounded-2xl bg-white/[0.02] flex items-center gap-8 group hover:bg-white/[0.03] transition-colors">
+    <span className="text-4xl md:text-5xl font-bold text-white/5 group-hover:text-white/10 transition-colors">{level}</span>
+    <div>
+      <h3 className="text-lg font-bold text-white uppercase tracking-widest mb-1">{title}</h3>
+      <p className="text-xs text-white/30 font-medium">{desc}</p>
     </div>
-    <ChevronRight className="ml-auto w-6 h-6 text-white/10 group-hover:text-cyan-400 transition-colors" />
   </div>
 );
 
-const Stat = ({ value, label }: { value: string, label: string }) => (
-  <div className="text-center space-y-1 group">
-    <div className="text-3xl md:text-5xl font-black text-white italic group-hover:glow-blue transition-all">{value}</div>
-    <div className="text-[10px] font-mono tracking-widest text-white/30 uppercase">{label}</div>
+const StatItem = ({ value, label }: { value: string, label: string }) => (
+  <div className="text-center space-y-1">
+    <div className="text-3xl md:text-5xl font-bold text-white tracking-tighter">{value}</div>
+    <div className="text-[10px] font-mono tracking-widest text-white/20 uppercase font-bold">{label}</div>
   </div>
 );
+

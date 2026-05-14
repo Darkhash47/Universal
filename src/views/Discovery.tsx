@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { collection, query, getDocs, limit } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
+import { collection, query, getDocs, limit, db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { ClippedContainer, TechHeader } from '../components/UI';
 import { Search, Eye, Terminal } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -38,72 +36,61 @@ export const Discovery = () => {
   return (
     <div className="space-y-12 pb-32">
       <div className="flex flex-col md:flex-row md:items-end justify-between gap-8">
-        <TechHeader title="Operative Directory" subtitle="Intel Network Pulse - Global Scan" />
-        <div className="relative w-full md:w-96 group">
-          <div className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
-            <Search className="w-4 h-4 text-white/20 group-focus-within:text-cyan-400 transition-colors" />
-          </div>
+        <TechHeader title="Discovery" subtitle="Node Registry Analysis" />
+        <div className="relative w-full md:w-80 group">
+          <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 text-white/20 group-focus-within:text-white transition-colors" />
           <input
             type="text"
-            placeholder="Scan for display names or skill tags..."
+            placeholder="Search nodes..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="w-full bg-[#0a0a0a] border border-white/10 rounded-2xl py-4 pl-12 pr-4 text-white font-mono text-[10px] placeholder:text-white/20 focus:outline-none focus:border-cyan-500/50 transition-all shadow-2xl"
+            className="w-full bg-white/[0.03] border border-white/10 rounded-xl py-3 pl-12 pr-4 text-white font-medium text-sm placeholder:text-white/10 focus:outline-none focus:border-white/20 focus:bg-white/[0.05] transition-all"
           />
         </div>
       </div>
 
       {loading ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-64 bg-white/5 border border-white/5 rounded-[2rem] animate-pulse" />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[1, 2, 3, 4, 5, 6].map(i => (
+            <div key={i} className="h-48 bg-white/[0.02] border border-white/5 rounded-2xl animate-pulse" />
           ))}
         </div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {filteredNodes.map((node) => (
             <Link key={node.id} to={`/profile/${node.id}`}>
-              <ClippedContainer className="group hover:bg-cyan-500/[0.02] transition-all duration-500 cursor-pointer h-full border-white/10 hover:border-cyan-500/50 shadow-2xl">
-                <div className="p-8 space-y-6">
-                  <div className="flex items-center gap-4">
-                    <div className="relative">
-                      <div className="w-16 h-16 rounded-2xl overflow-hidden border-2 border-white/10 shadow-lg bg-[#0a0a0a]">
-                        <img 
-                          src={node.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${node.id}`} 
-                          alt={node.displayName}
-                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                        />
-                      </div>
-                      <div className="absolute -bottom-1 -right-1 w-4 h-4 bg-green-500 rounded-full border-2 border-[#0a0a0a] shadow-[0_0_10px_rgba(34,197,94,0.5)]" />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="text-xl font-black text-white italic uppercase tracking-tighter truncate transition-colors group-hover:text-cyan-400">{node.displayName}</h3>
-                      <p className="text-[10px] text-cyan-400 font-mono font-bold uppercase tracking-widest truncate">{node.title}</p>
-                    </div>
+              <ClippedContainer className="group hover:bg-white/[0.02] transition-all duration-300 cursor-pointer h-full border-white/10 hover:border-white/20 shadow-xl p-6 md:p-8 space-y-6">
+                <div className="flex items-center gap-4">
+                  <div className="w-14 h-14 rounded-xl overflow-hidden border border-white/10 bg-black">
+                    <img 
+                      src={node.photoURL || `https://api.dicebear.com/7.x/bottts/svg?seed=${node.id}`} 
+                      alt={node.displayName}
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
                   </div>
+                  <div className="flex-1 min-w-0">
+                    <h3 className="text-lg font-bold text-white tracking-tight truncate group-hover:text-blue-400 transition-colors">{node.displayName}</h3>
+                    <p className="text-[10px] text-white/30 font-mono font-bold uppercase tracking-wider truncate">{node.title || 'OPERATIVE'}</p>
+                  </div>
+                </div>
 
-                  <p className="text-white/30 text-[10px] line-clamp-2 font-mono h-8 leading-relaxed">
-                    {node.bio || 'Operative log initialization complete. Background pending decryption.'}
-                  </p>
+                <p className="text-white/40 text-xs md:text-[13px] line-clamp-2 font-medium leading-relaxed">
+                  {node.bio || 'Credentials validated. Biography under restricted access.'}
+                </p>
 
-                  <div className="flex flex-wrap gap-1.5 min-h-[44px]">
-                    {Object.keys(node.hardSkills || {}).slice(0, 3).map((skill: string, i: number) => (
-                      <span key={i} className="text-[8px] bg-white/5 border border-white/10 px-2 py-1 rounded-lg text-white/50 uppercase font-mono tracking-widest group-hover:border-cyan-500/30 group-hover:text-cyan-400/70 transition-all">
-                        {skill}
-                      </span>
-                    ))}
-                    {Object.keys(node.hardSkills || {}).length > 3 && (
-                      <span className="text-[8px] text-white/20 px-2 py-1 flex items-center">+{Object.keys(node.hardSkills || {}).length - 3}</span>
-                    )}
-                  </div>
-                  
-                  <div className="pt-4 border-t border-white/5 flex items-center justify-between">
-                     <span className="text-[8px] font-mono text-white/30 uppercase tracking-[0.4em]">RANK: {node.role || 'CADET'}</span>
-                     <div className="flex items-center gap-2">
-                         <span className="text-[10px] font-bold text-white pr-2 border-r border-white/10">LVL {node.level || 1}</span>
-                         <Eye className="w-4 h-4 text-white/10 group-hover:text-cyan-400 transition-colors ml-2" />
-                     </div>
-                  </div>
+                <div className="flex flex-wrap gap-1.5 min-h-[28px]">
+                  {Object.keys(node.hardSkills || {}).slice(0, 2).map((skill: string, i: number) => (
+                    <span key={i} className="text-[9px] bg-white/5 border border-white/10 px-2 py-0.5 rounded text-white/40 uppercase font-bold tracking-wider">
+                      {skill}
+                    </span>
+                  ))}
+                </div>
+                
+                <div className="pt-4 border-t border-white/5 flex items-center justify-between">
+                   <span className="text-[9px] font-mono text-white/20 uppercase tracking-widest">LVL {node.level || 1}</span>
+                   <div className="flex items-center gap-2">
+                       <Eye className="w-4 h-4 text-white/10 group-hover:text-white transition-colors" />
+                   </div>
                 </div>
               </ClippedContainer>
             </Link>

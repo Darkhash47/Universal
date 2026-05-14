@@ -6,9 +6,7 @@ import {
   Layers, Lock, CheckCircle2, Circle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
-import { collection, onSnapshot } from 'firebase/firestore';
-import { db } from '../lib/firebase';
-import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
+import { collection, onSnapshot, db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { cn } from '../lib/utils';
 
 // --- DATA TYPES ---

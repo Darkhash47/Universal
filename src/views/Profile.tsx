@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { doc, getDoc, updateDoc, serverTimestamp } from 'firebase/firestore';
-import { db } from '../lib/firebase';
+import { doc, getDoc, updateDoc, serverTimestamp, db, handleFirestoreError, OperationType } from '../lib/firebase';
 import { useAuth } from '../context/AuthContext';
-import { handleFirestoreError, OperationType } from '../utils/handleFirestoreError';
 import { ClippedContainer, TechHeader, CyberButton } from '../components/UI';
 import { Shield, Terminal, BadgeCheck, ChevronLeft, Edit3, Save, X } from 'lucide-react';
 import { SkillTree } from '../components/SkillTree';
